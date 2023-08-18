@@ -1,0 +1,201 @@
+*,*::after,*::before{
+    box-sizing: border-box;
+}
+
+body{
+    padding: 0;
+    margin: 0;
+}
+
+:root{
+    --cell-size:100px;
+    --mark--size: calc(var(--cell-size)*0.9);
+}
+
+.board{
+    height: 100vh;
+    width: 100vw;
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    grid-template-columns: repeat(3,auto);
+
+    /* to align the MARK in center  */
+    justify-items: center;
+    align-items: center;
+}
+
+.cell{
+    width:var(--cell-size);
+    height:var(--cell-size);
+    border:1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+}
+
+
+/* removes top border of first row blocks */
+.cell:first-child,
+.cell:nth-child(2),
+.cell:nth-child(3) {
+    border-top: none;
+}
+
+/* removing left border from left edge blocks 
+i.e block with number 1,4,7 
+i.e 3n+1 and n starts from 0 */
+.cell:nth-child(3n+1) {
+    border-left: none;
+}
+
+/* removing right border from right edge blocks 
+i.e block with number 3,6,9 
+i.e 3n+3 and n starts from 0 */
+.cell:nth-child(3n+3) {
+    border-right: none;
+}
+
+
+/* removing bottom border from bottom row elements */
+.cell:last-child,
+.cell:nth-child(8),
+.cell:nth-child(7) {
+    border-bottom: none;
+}
+
+
+/* Hover effect on future blocks either X or O */
+
+/* 1-> .board.x .cell if X is next character to be played
+        and also check that class name "x" or "o" is not attached to it
+        if attached then do not present hover effect over there  
+ */
+.board.x .cell:not(.x):not(.o):hover::before,
+.board.x .cell:not(.x):not(.o):hover::after {
+    position:absolute;
+    content: "";
+    border-radius: 50%;
+    width: calc(var(--mark--size)*0.15);
+    height: var(--mark--size);
+    background-color: lightgray;
+}
+
+.board.x .cell:not(.x):not(.o):hover::before{
+    transform: rotate(-45deg);
+}
+
+.board.x .cell:not(.x):not(.o):hover::after{
+    transform: rotate(45deg);
+}
+
+/* 2-> .board.o .cell if O is next character to be played 
+        and also check that class name "x" or "o" is not attached to it
+        if attached then do not present hover effect over there  
+*/
+.board.o .cell:not(.x):not(.o):hover::before,
+.board.o .cell:not(.x):not(.o):hover::after {
+    position:absolute;
+    content: "";
+    border-radius: 50%;
+    background-color: black;
+    background-color: lightgray;
+}
+
+.board.o .cell:not(.x):not(.o):hover::before {
+    width: var(--mark--size);
+    height: var(--mark--size);
+
+}
+
+.board.o .cell:not(.x):not(.o):hover::after{
+    width: calc(var(--mark--size)*0.7);
+    height: calc(var(--mark--size)*0.7);
+    background-color: white;
+
+}
+
+
+
+/* making mark X in css */
+
+.cell.x::before,
+.cell.x::after{
+    position:absolute;
+    content: "";
+    width: calc(var(--mark--size)*0.15);
+    height: var(--mark--size);
+    background-color: black;
+    border-radius: 50%;
+}
+
+.cell.x::after{
+    transform: rotate(45deg);
+}
+
+.cell.x::before{
+    transform: rotate(-45deg);
+}
+
+/* making mark O in css */
+.cell.o::before,
+.cell.o::after{
+    position:absolute;
+    content: "";
+    border-radius: 50%;
+    background-color: black;
+}
+
+.cell.o::before{
+    width: var(--mark--size);
+    height: var(--mark--size);
+
+}
+
+.cell.o::after{
+    width: calc(var(--mark--size)*0.7);
+    height: calc(var(--mark--size)*0.7);
+    background-color: white;
+
+}
+
+/* If there is already a Character in Bloack Cursor ahould be not allowed */
+.cell.x,
+.cell.o{
+    cursor: not-allowed;
+}
+
+/* Winning Screen Message */
+.winning-message {
+    display: none;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0,0,0,0.9);
+    /* display: flex; */
+    justify-content: center;
+    color: white;
+    align-items: center;
+    flex-direction: column;
+    font-size: 5rem;
+}
+
+.winning-message button{
+    background-color: white;
+    border: 1px solid black;
+    font-size: 3rem;
+    padding: .25em 0.5em;
+}
+
+.winning-message button:hover{
+    color: white;
+    background-color: black;
+    border: 1px solid white;
+}
+.winning-message.show{
+    display: flex;
+}
